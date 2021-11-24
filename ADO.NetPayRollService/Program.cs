@@ -7,9 +7,11 @@ namespace ADO.NetPayRollService
         static void Main(string[] args)
         {
             Console.WriteLine("Hello And Welcome to Pay Roll Service!");
-            EmployeeRepository payroll = new EmployeeRepository();
-            payroll.GetAllEmployeeDetails();
+            //EmployeeRepository payroll = new EmployeeRepository();
+            //payroll.GetAllEmployeeDetails();
             Console.ReadLine();
+            EmployeeRepository employeeRepository = new EmployeeRepository();
+            employeeRepository.UpdateSalaryQuery();
         }
     }
 }

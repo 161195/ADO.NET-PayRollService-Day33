@@ -9,10 +9,12 @@ namespace ADO.NetPayRollService
 {
     public class EmployeeRepository
     {
+        //UC-1 connect to database
         public static string connectionString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=Payroll_Services_Database;";
         //creating object of sqlconnection class and creating connection with database
         SqlConnection sqlconnection = new SqlConnection(connectionString);
-       
+
+        //UC-2 Get All Employee Details from database Payroll_Services_Database and table employee_payroll.
         public void GetAllEmployeeDetails()
         {
             try
@@ -30,7 +32,7 @@ namespace ADO.NetPayRollService
                     {
                         model.EmployeeId = Convert.ToInt32(reader["Id"] == DBNull.Value ? default : reader["Id"]);
                         model.EmployeeName = Convert.ToString(reader["Name"] == DBNull.Value ? default : reader["Name"]);
-                        model.salary = Convert.ToDouble(reader["Salary"] == DBNull.Value ? default : reader["Salary"]);
+                        model.salary = Convert.ToDouble(reader["BasicPay"] == DBNull.Value ? default : reader["BasicPay"]);
                         model.StartDate = (DateTime)(reader["StartDate"] == DBNull.Value ? default : reader["StartDate"]);
                         model.gender = Convert.ToString(reader["Gender"] == DBNull.Value ? default : reader["Gender"]);
                         model.phoneNumber = Convert.ToInt32(reader["Phone"] == DBNull.Value ? default : reader["Phone"]);
@@ -58,6 +60,29 @@ namespace ADO.NetPayRollService
             {
                 sqlconnection.Close();
             }
+        }
+        //UseCase 3: Update Salary to 3000000
+        public int UpdateSalaryQuery()
+        {
+            //Open Connection
+            sqlconnection.Open();
+            string query = "update employee_payroll set BasicPay=3000000 where Name= 'Smriti'";
+            //Pass query to TSql
+            SqlCommand sqlCommand = new SqlCommand(query, sqlconnection);
+            int result = sqlCommand.ExecuteNonQuery();
+            if (result != 0)
+            {
+                Console.WriteLine("Updated!");
+            }
+            else
+            {
+                Console.WriteLine("Not Updated!");
+            }
+            //Close Connection
+            sqlconnection.Close();
+            GetAllEmployeeDetails();
+            return result;
+
         }
     }
 }

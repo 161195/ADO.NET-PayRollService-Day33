@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace ADO.NetPayRollService
 {
@@ -84,5 +85,41 @@ namespace ADO.NetPayRollService
             return result;
 
         }
+        //Adding New Details in row
+        public void AddEmployee(EmployeeModel model)
+        {
+            try
+            {
+                using (this.sqlconnection)
+                {
+                    SqlCommand command = new SqlCommand("dbo.spAddEmployeeDetails", this.sqlconnection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Name", model.EmployeeName);                   
+                    command.Parameters.AddWithValue("@StartDate", model.StartDate);
+                    command.Parameters.AddWithValue("@Gender", model.gender);
+                    //command.Parameters.AddWithValue("@BasicPay", model.BasicPay);
+                    sqlconnection.Open();
+                    var result = command.ExecuteNonQuery();
+
+                    if (result == 0)
+                    {
+                        Console.WriteLine("No Data Added");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Employee Data Added");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                sqlconnection.Close();
+            }
+        }
     }
 }
+
